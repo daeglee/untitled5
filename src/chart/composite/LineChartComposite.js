@@ -8,7 +8,6 @@ import {
     ResponsiveContainer, Legend, Line
 } from "recharts";
 import {toDate} from "date-fns";
-import {useDataContext} from "../../context/ChartDataUpdateContextProvider";
 import * as config from "../../config";
 import {ChartType} from "../DataType";
 import TimeFormatter from "../functions/TimeFormatter";
@@ -20,8 +19,6 @@ import {useInterval} from "../../util/useInterval";
 function LineChartComposite({rawDataType, dateType}) {
     const typeInfo = ChartType.LINE_CHART;
     const [data, setData] = useState([]);
-
-    const UpdateInfo = useDataContext();
 
     useEffect(() => {
         const afterThen = (x) => {

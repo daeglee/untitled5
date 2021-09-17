@@ -1,15 +1,15 @@
 //RawDataType
 export const DataType = {
-    CPU: {type: 0, title: "CPU Usage", YAxisDataKey: "cpuusage", controllerAddress: "cpu"},
-    MEMORY: {type: 1, title: "Memory Usage", YAxisDataKey: "memoryUsage", controllerAddress: "memory"}
+    CPU: {name: "cpu", title: "CPU Usage", YAxisDataKey: "cpuusage", controllerAddress: "cpu"},
+    MEMORY: {name: "memory", title: "Memory Usage", YAxisDataKey: "memoryUsage", controllerAddress: "memory"}
 }
 
 export const ChartType = {
-    AREA_CHART: {id: 0, dataSize: 20},
-    PIE_CHART: {id: 1, dataSize: 1},
-    LINE_CHART: {id: 2, dataSize: 20},
-    BAR_CHART: {id: 3, dataSize: 10},
-    SCATTER_CHART: {id: 0, dataSize: 16},
+    AREA_CHART: {name: "area", dataSize: 20},
+    PIE_CHART: {name: "pie", dataSize: 1},
+    LINE_CHART: {name: "line", dataSize: 20},
+    BAR_CHART: {name: "bar", dataSize: 10},
+    SCATTER_CHART: {name: "scatter", dataSize: 16},
 }
 
 // 소문자로 데이터를 전달하기위해

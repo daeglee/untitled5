@@ -1,8 +1,5 @@
 import ChartComposite from "./ChartComposite";
-import {useDataContext, useDispatchContext} from "../context/ChartDataUpdateContextProvider";
-
 function ChartList({charts}) {
-    const dispatch = useDispatchContext();
 
     // 현재 사용중인 배열의 타입의 가져와서
     // 타입의 배열로 실시간 데이터 요청하기(1초마다)

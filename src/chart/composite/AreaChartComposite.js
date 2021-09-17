@@ -9,7 +9,6 @@ import {
     ResponsiveContainer
 } from "recharts";
 import {format, toDate} from "date-fns";
-import {useDataContext} from "../../context/ChartDataUpdateContextProvider";
 import * as config from "../../config";
 import {ChartType} from "../DataType";
 import TimeFormatter from "../functions/TimeFormatter";
@@ -21,8 +20,6 @@ import {useInterval} from "../../util/useInterval";
 function AreaChartComposite({rawDataType, dateType}) {
     const typeInfo = ChartType.AREA_CHART;
     const [data, setData] = useState([]);
-
-    const UpdateInfo = useDataContext();
 
     useEffect(() => {
         const afterThen = (x) => {

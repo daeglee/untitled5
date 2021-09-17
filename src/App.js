@@ -1,8 +1,9 @@
 import './App.css';
 import {useRef, useState} from "react";
 import ChartList from "./chart/ChartList";
-import {ChartDataUpdateContextProvider} from "./context/ChartDataUpdateContextProvider";
 import {ChartType, DateType, DataType} from "./chart/DataType";
+import {Link, Route} from "react-router-dom";
+import Edit from "./Edit";
 
 function App() {
   const [charts, setCharts] = useState([
@@ -43,9 +44,20 @@ function App() {
 
   return (
       <>
-        <ChartDataUpdateContextProvider>
-          <ChartList charts={charts} />
-        </ChartDataUpdateContextProvider>
+        <div>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/edit">편집하기</Link>
+            </li>
+          </ul>
+          <hr />
+          <Route path="/" exact={true}
+                 render={() => <ChartList charts={charts}/>}/>
+          <Route path="/edit" render={Edit} />
+        </div>
       </>
   );
 }

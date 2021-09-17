@@ -6,7 +6,6 @@ import {
     Tooltip,
     XAxis, Legend, Scatter, ResponsiveContainer, ZAxis
 } from "recharts";
-import {useDataContext} from "../../context/ChartDataUpdateContextProvider";
 import * as config from "../../config";
 import {ChartType} from "../DataType";
 import {toDate} from "date-fns";
@@ -18,8 +17,6 @@ import {useInterval} from "../../util/useInterval";
 function AreaChartComposite({rawDataType, dateType}) {
     const typeInfo = ChartType.SCATTER_CHART;
     const [data, setData] = useState([]);
-
-    const UpdateInfo = useDataContext();
 
     useEffect(() => {
         const afterThen = (x) => {
