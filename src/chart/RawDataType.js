@@ -1,5 +1,5 @@
 //RawDataType
-export const DataType = {
+export const RawDataType = {
     CPU: {name: "cpu", title: "CPU Usage", YAxisDataKey: "cpuusage", controllerAddress: "cpu"},
     MEMORY: {name: "memory", title: "Memory Usage", YAxisDataKey: "memoryUsage", controllerAddress: "memory"}
 }

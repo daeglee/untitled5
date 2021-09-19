@@ -9,7 +9,7 @@ import {
 } from "recharts";
 import {toDate} from "date-fns";
 import * as config from "../../config";
-import {ChartType} from "../DataType";
+import {ChartType} from "../RawDataType";
 import TimeFormatter from "../functions/TimeFormatter";
 import ChartToolTip from "../functions/ChartToolTip";
 import {MockChartUpdate,MockChartInitiate} from "../functions/MockChartUpdate";
@@ -45,12 +45,7 @@ function LineChartComposite({rawDataType, dateType}) {
 
     return (
         <>
-            <div>
-                <h2>
-                    {rawDataType.title}
-                </h2>
-            </div>
-            <ResponsiveContainer width={config.GRAPH_WIDTH} height={config.GRAPH_HEIGHT}>
+            <ResponsiveContainer width="100%" height="90%">
                 <LineChart
                     width={500}
                     height={300}

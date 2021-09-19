@@ -1,0 +1,10 @@
+div.box{
+    border: 1px solid black;
+    height: 100%;
+    width: 100%;
+}
+
+div.chartTitle{
+    max-height: 10%;
+    height: 10%;
+}

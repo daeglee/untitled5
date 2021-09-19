@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import {format, toDate} from "date-fns";
 import * as config from "../../config";
-import {ChartType} from "../DataType";
+import {ChartType} from "../RawDataType";
 import TimeFormatter from "../functions/TimeFormatter";
 import ChartToolTip from "../functions/ChartToolTip";
 import {MockChartUpdate,MockChartInitiate} from "../functions/MockChartUpdate";
@@ -46,14 +46,8 @@ function BarChartComposite({rawDataType, dateType}) {
 
     return (
         <>
-            <div>
-                <h2>
-                    {rawDataType.title}
-                </h2>
-            </div>
+            <ResponsiveContainer width="100%" height="90%">
             <BarChart
-                width={config.GRAPH_WIDTH}
-                height={config.GRAPH_HEIGHT}
                 data={data}>
 
                 <CartesianGrid strokeDasharray="3 3"/>
@@ -73,6 +67,7 @@ function BarChartComposite({rawDataType, dateType}) {
                 <Tooltip content={<ChartToolTip/>}/>
                 <CartesianGrid opacity={0.1} vertical={false}/>
             </BarChart>
+                </ResponsiveContainer>
         </>
     );
 }

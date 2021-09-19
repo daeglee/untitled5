@@ -7,7 +7,7 @@ import {
     XAxis, Legend, Scatter, ResponsiveContainer, ZAxis
 } from "recharts";
 import * as config from "../../config";
-import {ChartType} from "../DataType";
+import {ChartType} from "../RawDataType";
 import {toDate} from "date-fns";
 import TimeFormatter from "../functions/TimeFormatter";
 import {MockChartUpdate,MockChartInitiate} from "../functions/MockChartUpdate";
@@ -46,13 +46,7 @@ function AreaChartComposite({rawDataType, dateType}) {
 
     return (
         <>
-            <div>
-                <h2>
-                    {rawDataType.title}
-                </h2>
-            </div>
-
-            <ResponsiveContainer width={config.GRAPH_WIDTH} height={config.GRAPH_HEIGHT}>
+            <ResponsiveContainer width="100%" height="90%">
             <ScatterChart
                 data={data}>
                 <CartesianGrid/>

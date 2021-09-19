@@ -14,6 +14,12 @@ export async function getMemoryUsages(dataSize) {
     return response.data;
 }
 
+export async function getChartList() {
+    const response = await axios.get(
+        `/api/chart/list`
+    );
+    return response.data;
+}
 
 
 

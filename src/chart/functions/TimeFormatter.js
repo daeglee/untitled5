@@ -1,5 +1,5 @@
 import {format} from "date-fns";
-import {DateType} from "../DataType";
+import {DateType} from "../RawDataType";
 import * as config from "../../config";
 
 function TimeFormatter(date, dateType) {
