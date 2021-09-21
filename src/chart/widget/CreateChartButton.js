@@ -22,6 +22,7 @@ import {
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import {MdDelete, MdEdit} from "react-icons/md";
+import {ChartDelete, ChartEdit} from "../ChartList";
 
 /**
  * Create Chart Button and dialog
@@ -64,6 +65,23 @@ export default function CreateChartButton({isEditMode, setCharts, chart, charts,
 
         setOpen(false);
     };
+
+    function handleSave () {
+        const cloneChart = charts.slice();
+        cloneChart[index] = {
+            id: charts[index].id,
+            chartType: chartType,
+            dateType: dateType,
+            rawDataType: dataType,
+            x: parseInt(document.getElementById("x-position").value),
+            y: parseInt(document.getElementById("y-position").value),
+            width: document.getElementById("width").value,
+            height: document.getElementById("height").value
+        }
+        console.log(cloneChart[index])
+        setCharts(cloneChart);
+        setOpen(false);
+    };
     const handleClose = () => {
         setOpen(false);
     };
@@ -98,6 +116,12 @@ export default function CreateChartButton({isEditMode, setCharts, chart, charts,
             setChartType(charts[index].chartType);
             setDataType(charts[index].rawDataType);
             setDateType(charts[index].dateType);
+        }
+    }, []);
+
+
+    useEffect(() => {
+        if (chart != null && isEditMode) {
             setX(charts[index].x);
             setY(charts[index].y);
             setWidth(charts[index].width);
@@ -105,7 +129,17 @@ export default function CreateChartButton({isEditMode, setCharts, chart, charts,
         }
     }, [charts]);
 
+
     function getDialog() {
+        function saveButton() {
+
+            if(chart != null){
+                return <Button onClick={handleSave}>Save</Button>;
+            }else{
+                return <Button onClick={handleCreate}>Create</Button>;
+            }
+        }
+
         return <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Create chart</DialogTitle>
             <DialogContent>
@@ -119,7 +153,7 @@ export default function CreateChartButton({isEditMode, setCharts, chart, charts,
                 >
                     <ListItem>
                         <FormControl sx={{mt: 2, minWidth: 240}}>
-                            <InputLabel htmlFor="datatype">dateType</InputLabel>
+                            <InputLabel htmlFor="datatype">dataType</InputLabel>
                             <Select
                                 id="datatype"
                                 autoFocus
@@ -210,7 +244,7 @@ export default function CreateChartButton({isEditMode, setCharts, chart, charts,
 
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCreate}>Create</Button>
+                {saveButton()}
                 <Button onClick={handleClose}>Close</Button>
             </DialogActions>
         </Dialog>;
@@ -222,16 +256,14 @@ export default function CreateChartButton({isEditMode, setCharts, chart, charts,
         }
 
         if (chart != null) {
-            let size = String(height).match(/\d/g);
-            size = size.join("");
             return (
                 <>
-                    <div className="chartEdit" >
+                    <ChartEdit>
                         <MdEdit size="20%" onClick={handleClickOpen}/>
-                    </div>
-                    <div className="chartDelete">
+                    </ChartEdit>
+                    <ChartDelete>
                         <MdDelete size="20%" onClick={deleteClicked}/>
-                    </div>
+                    </ChartDelete>
                 </>
             )
         } else {

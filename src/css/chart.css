@@ -1,45 +1,5 @@
-div.box{
-    border: 1px solid black;
-    height: 100%;
-    width: 100%;
-    position: relative;
-}
-
 div.chartTitle{
     max-height: 10%;
     height: 10%;
     z-index: 1;
-}
-div.chartEdit{
-    position: absolute;
-    z-index: 2;
-    opacity: 0.5;
-    top: 40%;
-    left: 40%;
-}
-
-div.chartDelete{
-    position: absolute;
-    z-index: 2;
-    opacity: 0.5;
-    top: 40%;
-    left: 50%;
-}
-
-div.chartEdit:hover{
-    position: absolute;
-    z-index: 2;
-    color: crimson;
-    opacity: 0.7;
-    top: 40%;
-    left: 40%;
-}
-
-div.chartDelete:hover{
-    position: absolute;
-    z-index: 2;
-    color: crimson;
-    opacity: 0.7;
-    top: 40%;
-    left: 50%;
 }
