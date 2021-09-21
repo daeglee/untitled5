@@ -13,7 +13,6 @@ export function MockChartInitiate(chartType, rawDataType, dateType, afterThen){
 
 export function MockChartUpdate(chartType, rawDataType, dateType, afterThen){
     const endTime = Math.floor(Date.now() /1000);
-    const startTime = endTime - dateType.second + 1;
 
-    ChartUpdate(chartType, rawDataType, dateType, afterThen, startTime, endTime);
+    ChartUpdate(chartType, rawDataType, dateType, afterThen, endTime, endTime);
 }
