@@ -21,3 +21,10 @@ div.chartEdit:hover{
     z-index: 2;
     opacity: 0.5;
 }
+
+
+div.chartEditNan{
+    position: relative;
+    z-index: 2;
+    opacity: 0.5;
+}

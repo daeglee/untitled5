@@ -9,6 +9,34 @@ function ChartList({charts, setCharts, isEditMode}) {
         console.log("edit clicked");
     };
     let deleteClicked;
+
+    const editButtons = (chart) => {
+        if (isEditMode) {
+            if (isNaN(chart.width)) {
+                return (
+                    <div className="chartEditNan" style={{
+                        left: 0,
+                        top: 0
+                    }}>
+                        <MdEdit size="24" onClick={editClicked}/>
+                        <MdDelete size="24" onClick={deleteClicked}/>
+                    </div>
+                )
+            } else {
+                return (
+                    <div className="chartEdit" style={{
+                        left: 1 * chart.width / 3,
+                        top: 2 * chart.height / 5
+                    }}>
+                        <MdEdit size={chart.width / 4} onClick={editClicked}/>
+                        <MdDelete size={chart.width / 4} onClick={deleteClicked}/>
+                    </div>
+                )
+            }
+        }
+
+    }
+
     return (
         <div>
             {charts.map((chart, index) => (
@@ -39,15 +67,8 @@ function ChartList({charts, setCharts, isEditMode}) {
                         bounds="window"
                     >
                         <div className="box">
-                            <div className="chartEdit" style={{
-                                left: 1 * chart.width/3,
-                                top: 2 * chart.height/5
-                            }}>
-                                <MdEdit size= {chart.width/4} onClick={editClicked}/>
-                                <MdDelete size={chart.width/4} onClick={deleteClicked}/>
-                            </div>
                             <ChartComposite chart={chart}/>
-
+                            {editButtons(chart)}
                         </div>
 
                     </Rnd>
