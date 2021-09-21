@@ -10,7 +10,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import {ChartTypeList, RawDataType, DataTypeList, DateType, DateTypeList, ChartType} from "../RawDataType";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
     Collapse,
     List,
@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
+import {MdDelete, MdEdit} from "react-icons/md";
 
 /**
  * Create Chart Button and dialog
@@ -29,7 +30,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
  * @returns {JSX.Element}
  * @constructor
  */
-export default function CreateChartButton({isEditMode, setCharts}) {
+export default function CreateChartButton({isEditMode, setCharts, chart, charts, index}) {
     const [open, setOpen] = React.useState(false); // dialog open
 
     const [dataType, setDataType] = useState(RawDataType.CPU.controllerAddress);
@@ -41,7 +42,6 @@ export default function CreateChartButton({isEditMode, setCharts}) {
     const [y, setY] = useState(500);
     const [width, setWidth] = useState(400);
     const [height, setHeight] = useState(400);
-
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -60,7 +60,7 @@ export default function CreateChartButton({isEditMode, setCharts}) {
             y: y,
             width: width,
             height: height
-        } ] );
+        }]);
 
         setOpen(false);
     };
@@ -93,124 +93,158 @@ export default function CreateChartButton({isEditMode, setCharts}) {
     const changeHeight = (e) => {
         setHeight(e.target.value);
     }
+    useEffect(() => {
+        if (chart != null && isEditMode) {
+            setChartType(charts[index].chartType);
+            setDataType(charts[index].rawDataType);
+            setDateType(charts[index].dateType);
+            setX(charts[index].x);
+            setY(charts[index].y);
+            setWidth(charts[index].width);
+            setHeight(charts[index].height);
+        }
+    }, [charts]);
 
-    if(isEditMode){
-        // TODO: Edit 모드인 경우, x,y,width, height를
-        // 변경해줘야함 , 생성자역할로
+    function getDialog() {
+        return <Dialog open={open} onClose={handleClose}>
+            <DialogTitle>Create chart</DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    You can create a custom chart by clicking the 'Save' button.
+                </DialogContentText>
+                <List
+                    sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                >
+                    <ListItem>
+                        <FormControl sx={{mt: 2, minWidth: 240}}>
+                            <InputLabel htmlFor="datatype">dateType</InputLabel>
+                            <Select
+                                id="datatype"
+                                autoFocus
+                                value={dataType}
+                                onChange={dataTypeChanged}
+                                label="datatype"
+                            >
+                                {DataTypeList.map(dataType => (
+                                    <MenuItem value={dataType.controllerAddress}
+                                              key={dataType.id}>{dataType.controllerAddress}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </ListItem>
+                    <ListItem>
+                        <FormControl sx={{mt: 2, minWidth: 240}}>
+                            <InputLabel htmlFor="chartType">chartType</InputLabel>
+                            <Select
+                                id="chartType"
+                                autoFocus
+                                value={chartType}
+                                onChange={chartTypeChanged}
+                                label="chartType"
+                            >
+                                {ChartTypeList.map(chartType => (
+                                    <MenuItem value={chartType.name} key={chartType.id}>{chartType.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </ListItem>
+                    <ListItem>
+                        <FormControl sx={{mt: 2, minWidth: 240}}>
+                            <InputLabel htmlFor="dateType">dateType</InputLabel>
+                            <Select
+                                id="dateType"
+                                autoFocus
+                                value={dateType}
+                                onChange={dateTypeChanged}
+                                label="dateType"
+                            >
+                                {DateTypeList.map(dateType => (
+                                    <MenuItem value={dateType.name} key={dateType.id}>{dateType.name}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </ListItem>
+                    <ListItemButton onClick={handleClick}>
+                        <ListItemText primary="Detail"/>
+                        {nestedOpen ? <ExpandLess/> : <ExpandMore/>}
+                    </ListItemButton>
+                    <Collapse in={nestedOpen} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                            <ListItem sx={{pl: 4}}>
+                                <TextField
+                                    label="X"
+                                    defaultValue={x}
+                                    id="x-position"
+                                    size="small"
+                                    onChange={changeX}
+                                />
+                                <TextField
+                                    label="Y"
+                                    id="y-position"
+                                    defaultValue={y}
+                                    size="small"
+                                    onChange={changeY}
+                                />
+                            </ListItem>
+                            <ListItem sx={{pl: 4}}>
+                                <TextField
+                                    label="width"
+                                    defaultValue={width}
+                                    id="width"
+                                    size="small"
+                                    onChange={changeWidth}
+                                />
+                                <TextField
+                                    label="height"
+                                    id="height"
+                                    defaultValue={height}
+                                    size="small"
+                                    onChange={changeHeight}
+                                />
+                            </ListItem>
+                        </List>
+                    </Collapse>
+                </List>
+
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleCreate}>Create</Button>
+                <Button onClick={handleClose}>Close</Button>
+            </DialogActions>
+        </Dialog>;
+    }
+
+    function getButton() {
+        function deleteClicked() {
+
+        }
+
+        if (chart != null) {
+            let size = String(height).match(/\d/g);
+            size = size.join("");
+            return (
+                <>
+                    <div className="chartEdit" >
+                        <MdEdit size="20%" onClick={handleClickOpen}/>
+                    </div>
+                    <div className="chartDelete">
+                        <MdDelete size="20%" onClick={deleteClicked}/>
+                    </div>
+                </>
+            )
+        } else {
+            return <Button variant="outlined" onClick={handleClickOpen} disabled={!isEditMode}>
+                Create Custom Chart
+            </Button>;
+        }
     }
 
     return (
         <React.Fragment>
-            <Button variant="outlined" onClick={handleClickOpen} disabled={!isEditMode}>
-                Create Custom Chart
-            </Button>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Create chart</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        You can create a custom chart by clicking the 'Save' button.
-                    </DialogContentText>
-                    <List
-                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                        component="nav"
-                        aria-labelledby="nested-list-subheader"
-                    >
-                        <ListItem>
-                            <FormControl sx={{ mt: 2, minWidth: 240 }}>
-                                <InputLabel htmlFor="datatype">dateType</InputLabel>
-                                <Select
-                                    id="datatype"
-                                    autoFocus
-                                    value={dataType}
-                                    onChange={dataTypeChanged}
-                                    label="datatype"
-                                >
-                                    {DataTypeList.map( dataType =>(
-                                        <MenuItem value={dataType.controllerAddress} key={dataType.id}>{dataType.controllerAddress}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </ListItem>
-                        <ListItem>
-                            <FormControl sx={{ mt: 2, minWidth: 240 }}>
-                                <InputLabel htmlFor="chartType">chartType</InputLabel>
-                                <Select
-                                    id="chartType"
-                                    autoFocus
-                                    value={chartType}
-                                    onChange={chartTypeChanged}
-                                    label="chartType"
-                                >
-                                    {ChartTypeList.map( chartType =>(
-                                        <MenuItem value={chartType.name} key={chartType.id}>{chartType.name}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </ListItem>
-                        <ListItem>
-                            <FormControl sx={{ mt: 2, minWidth: 240 }}>
-                                <InputLabel htmlFor="dateType">dateType</InputLabel>
-                                <Select
-                                    id="dateType"
-                                    autoFocus
-                                    value={dateType}
-                                    onChange={dateTypeChanged}
-                                    label="dateType"
-                                >
-                                    {DateTypeList.map( dateType =>(
-                                        <MenuItem value={dateType.name} key={dateType.id}>{dateType.name}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </ListItem>
-                        <ListItemButton onClick={handleClick}>
-                            <ListItemText primary="Detail" />
-                            {nestedOpen ? <ExpandLess /> : <ExpandMore />}
-                        </ListItemButton>
-                        <Collapse in={nestedOpen} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                                <ListItem sx={{ pl: 4 }}>
-                                    <TextField
-                                        label="X"
-                                        defaultValue={x}
-                                        id="x-position"
-                                        size="small"
-                                        onChange={changeX}
-                                    />
-                                    <TextField
-                                        label="Y"
-                                        id="y-position"
-                                        defaultValue={y}
-                                        size="small"
-                                        onChange={changeY}
-                                    />
-                                </ListItem>
-                                <ListItem sx={{ pl: 4 }}>
-                                    <TextField
-                                        label="width"
-                                        defaultValue={width}
-                                        id="width"
-                                        size="small"
-                                        onChange={changeWidth}
-                                    />
-                                    <TextField
-                                        label="height"
-                                        id="height"
-                                        defaultValue={height}
-                                        size="small"
-                                        onChange={changeHeight}
-                                    />
-                                </ListItem>
-                            </List>
-                        </Collapse>
-                    </List>
-
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCreate}>Create</Button>
-                    <Button onClick={handleClose}>Close</Button>
-                </DialogActions>
-            </Dialog>
+            {getButton()}
+            {getDialog()}
         </React.Fragment>
     );
 }

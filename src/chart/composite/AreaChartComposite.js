@@ -8,8 +8,7 @@ import {
     XAxis,
     ResponsiveContainer
 } from "recharts";
-import {format, toDate} from "date-fns";
-import * as config from "../../config";
+import {toDate} from "date-fns";
 import {ChartType} from "../RawDataType";
 import TimeFormatter from "../functions/TimeFormatter";
 import ChartToolTip from "../functions/ChartToolTip";

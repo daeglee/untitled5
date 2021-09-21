@@ -1,39 +1,15 @@
 import ChartComposite from "./ChartComposite";
 import {Rnd} from 'react-rnd';
 import '../css/chart.css';
-import {MdEdit, MdDelete} from 'react-icons/md';
+import CreateChartButton from "./widget/CreateChartButton";
 
 function ChartList({charts, setCharts, isEditMode}) {
 
-    const editClicked = () => {
-        console.log("edit clicked");
-    };
-    let deleteClicked;
-
-    const editButtons = (chart) => {
-        if (isEditMode) {
-            if (isNaN(chart.width)) {
-                return (
-                    <div className="chartEditNan" style={{
-                        left: 0,
-                        top: 0
-                    }}>
-                        <MdEdit size="24" onClick={editClicked}/>
-                        <MdDelete size="24" onClick={deleteClicked}/>
-                    </div>
-                )
-            } else {
-                return (
-                    <div className="chartEdit" style={{
-                        left: 1 * chart.width / 3,
-                        top: 2 * chart.height / 5
-                    }}>
-                        <MdEdit size={chart.width / 4} onClick={editClicked}/>
-                        <MdDelete size={chart.width / 4} onClick={deleteClicked}/>
-                    </div>
-                )
-            }
-        }
+    const editButtons = (chart, index) => {
+        if(isEditMode)
+        return (
+            <CreateChartButton isEditMode={true} setCharts={setCharts} chart={chart} charts={charts} index={index}/>
+        )
 
     }
 
@@ -67,8 +43,8 @@ function ChartList({charts, setCharts, isEditMode}) {
                         bounds="window"
                     >
                         <div className="box">
+                            {editButtons(chart, index)}
                             <ChartComposite chart={chart}/>
-                            {editButtons(chart)}
                         </div>
 
                     </Rnd>

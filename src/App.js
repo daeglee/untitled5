@@ -10,6 +10,14 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [charts, setCharts] = useState([]);
     const [isEditMode, setMode] = useState(false);
+
+    function setChartsFunction(newValue){
+        setCharts(newValue);
+    }
+    function getChart(){
+        return charts;
+    }
+
     useEffect(() => {
         getChartList().then(
             (value => {
@@ -36,13 +44,14 @@ function App() {
     }
 
     function saveClicked() {
-        console.log("before save")
-        console.log(charts)
-
         postChartList(charts).then(r => {
-            console.log(r)
             console.log("saved");
-        });
+        }).catch( reason => {
+            console.log("save failed");
+            console.log(reason);
+            }
+
+        );
     }
 
     return (
@@ -59,10 +68,10 @@ function App() {
                 <hr/>
                 {<div>
                     <Button variant="outlined" disabled={!isEditMode} onClick={saveClicked}>Save</Button>
-                    <CreateChartButton isEditMode={isEditMode} setCharts={setCharts}/>
+                    <CreateChartButton isEditMode={isEditMode} setCharts={setChartsFunction}/>
                 </div>}
                 <Route path="/" exact={true}
-                       render={() => <ChartList charts={charts} setCharts={setCharts} isEditMode={isEditMode}/>}/>
+                       render={() => <ChartList charts={getChart()} setCharts={setChartsFunction} isEditMode={isEditMode}/>}/>
             </div>
         </>
     );

@@ -3,10 +3,8 @@ import {
     ScatterChart,
     CartesianGrid,
     YAxis,
-    Tooltip,
-    XAxis, Legend, Scatter, ResponsiveContainer, ZAxis
+    XAxis, Legend, Scatter, ResponsiveContainer
 } from "recharts";
-import * as config from "../../config";
 import {ChartType} from "../RawDataType";
 import {toDate} from "date-fns";
 import TimeFormatter from "../functions/TimeFormatter";

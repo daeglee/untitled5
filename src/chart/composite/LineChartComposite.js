@@ -8,11 +8,10 @@ import {
     ResponsiveContainer, Legend, Line
 } from "recharts";
 import {toDate} from "date-fns";
-import * as config from "../../config";
 import {ChartType} from "../RawDataType";
 import TimeFormatter from "../functions/TimeFormatter";
 import ChartToolTip from "../functions/ChartToolTip";
-import {MockChartUpdate,MockChartInitiate} from "../functions/MockChartUpdate";
+import {MockChartUpdate, MockChartInitiate} from "../functions/MockChartUpdate";
 import {useInterval} from "../../util/useInterval";
 
 
@@ -28,16 +27,15 @@ function LineChartComposite({rawDataType, dateType}) {
     }, []);
 
 
-
-    useInterval( ()=>{
+    useInterval(() => {
         const afterThen = (x) => {
             const dataSize = x.length;
             const stateSize = data.length;
             let sliceSize = 0
-            if(typeInfo.dataSize < dataSize + stateSize){
+            if (typeInfo.dataSize < dataSize + stateSize) {
                 sliceSize = dataSize + stateSize - typeInfo.dataSize;
             }
-            setData( (prevData) => [...prevData, ...x].slice(sliceSize));
+            setData((prevData) => [...prevData, ...x].slice(sliceSize));
         }
         MockChartUpdate(typeInfo, rawDataType, dateType, afterThen);
 
@@ -57,7 +55,7 @@ function LineChartComposite({rawDataType, dateType}) {
                         bottom: 5,
                     }}
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis dataKey="logTime"
                            tickFormatter={(logTime) => {
                                const date = toDate(logTime * 1000);
@@ -66,8 +64,8 @@ function LineChartComposite({rawDataType, dateType}) {
                            }}/>
                     <YAxis dataKey={rawDataType.YAxisDataKey}/>
                     <Tooltip content={<ChartToolTip/>}/>
-                    <Legend />
-                    <Line type="monotone" dataKey={rawDataType.YAxisDataKey} stroke="#8884d8" activeDot={{ r: 8 }}
+                    <Legend/>
+                    <Line type="monotone" dataKey={rawDataType.YAxisDataKey} stroke="#8884d8" activeDot={{r: 8}}
                           isAnimationActive={false}/>
                 </LineChart>
             </ResponsiveContainer>
