@@ -27,12 +27,12 @@ import {useDataContext, useDispatchContext} from "../../context/ChartDataProvide
 
 /**
  * Create Chart Button and dialog
- * @param isEditMode : edit mode or create mode
+ * @param isEditMode : edit mode or create mode 이지만 실제 구분은 chart =null인지 확인으로 하고 있어서 ...
  * @param addChart : setCharts state
  * @returns {JSX.Element}
  * @constructor
  */
-export default function CreateChartButton({isEditMode, chart,index, changeState}) {
+export default function CreateChartButton({isEditMode, chart, index, changeState}) {
     const [open, setOpen] = React.useState(false); // dialog open
 
     const [dataType, setDataType] = useState(RawDataType.CPU.controllerAddress);
@@ -47,7 +47,8 @@ export default function CreateChartButton({isEditMode, chart,index, changeState}
 
     const handleClickOpen = () => {
         setOpen(true);
-        changeState(true);
+        if (changeState != null)
+            changeState(true);
     };
 
     const charts = useDataContext();
@@ -70,11 +71,12 @@ export default function CreateChartButton({isEditMode, chart,index, changeState}
             height: height
         }]);
 
-        changeState(false);
+        if (changeState != null)
+            changeState(false);
         setOpen(false);
     };
 
-    function handleSave () {
+    function handleSave() {
         const cloneChart = [...charts];
         cloneChart[index] = {
             ...cloneChart[index],
@@ -88,11 +90,15 @@ export default function CreateChartButton({isEditMode, chart,index, changeState}
         }
         setCharts(cloneChart);
         setOpen(false);
-        changeState(false);
-    };
+        if (changeState != null) {
+            changeState(false);
+        }
+    }
     const handleClose = () => {
         setOpen(false);
-        changeState(false);
+        if (changeState != null) {
+            changeState(false);
+        }
     };
     const dataTypeChanged = (event) => {
         setDataType(event.target.value);
@@ -142,9 +148,9 @@ export default function CreateChartButton({isEditMode, chart,index, changeState}
     function getDialog() {
         function saveButton() {
 
-            if(chart != null){
+            if (chart != null) {
                 return <Button onClick={handleSave}>Save</Button>;
-            }else{
+            } else {
                 return <Button onClick={handleCreate}>Create</Button>;
             }
         }
@@ -261,7 +267,15 @@ export default function CreateChartButton({isEditMode, chart,index, changeState}
 
     function getButton() {
         function deleteClicked() {
-
+            const cloneChart = [...charts];
+            cloneChart[index] = {
+                ...cloneChart[index],
+                x: -20000,
+                y: -20000,
+            }
+            setCharts(cloneChart);
+            setOpen(false);
+            changeState(false);
         }
 
         if (chart != null) {

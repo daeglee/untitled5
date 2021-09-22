@@ -50,16 +50,16 @@ function ChartList({isEditMode}) {
     const charts = useDataContext();
     const setCharts = useDispatchContext();
 
-    const editButtons = (chart, index, changeState) => {
-        if(isEditMode)
-        return (
-            <CreateChartButton isEditMode={isEditMode} chart={chart} index={index} changeState = {changeState}/>
-        )
-
-    }
     const [openDialog,setOpenDialog] = useState(false); // Dialog open에도 drag되는 문제
-    const changeState = (openState) =>{
+    function changeState(openState){
         setOpenDialog(openState);
+    }
+    const editButtons = (chart, index) => {
+        if(isEditMode)
+            return (
+                <CreateChartButton isEditMode={isEditMode} chart={chart} index={index} changeState={changeState}/>
+            )
+
     }
 
     return (
@@ -89,7 +89,7 @@ function ChartList({isEditMode}) {
                         bounds="window"
                     >
                         <Box>
-                            {editButtons(chart, index,changeState)}
+                            {editButtons(chart, index)}
                             <ChartComposite chart={chart}/>
                         </Box>
 
