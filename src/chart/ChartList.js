@@ -3,6 +3,8 @@ import {Rnd} from 'react-rnd';
 import '../css/chart.css';
 import CreateChartButton from "./widget/CreateChartButton";
 import styled from "@emotion/styled/macro";
+import {useDataContext, useDispatchContext} from "../context/ChartDataProvider";
+import {useState} from "react";
 
 export const ChartEdit = styled.div`
   position: absolute;
@@ -44,14 +46,20 @@ const Box = styled.div`
 `;
 
 
-function ChartList({charts, setCharts, isEditMode}) {
+function ChartList({isEditMode}) {
+    const charts = useDataContext();
+    const setCharts = useDispatchContext();
 
-    const editButtons = (chart, index) => {
+    const editButtons = (chart, index, changeState) => {
         if(isEditMode)
         return (
-            <CreateChartButton isEditMode={isEditMode} setCharts={setCharts} chart={chart} charts={charts} index={index}/>
+            <CreateChartButton isEditMode={isEditMode} chart={chart} index={index} changeState = {changeState}/>
         )
 
+    }
+    const [openDialog,setOpenDialog] = useState(false); // Dialog open에도 drag되는 문제
+    const changeState = (openState) =>{
+        setOpenDialog(openState);
     }
 
     return (
@@ -59,14 +67,11 @@ function ChartList({charts, setCharts, isEditMode}) {
             {charts.map((chart, index) => (
                 <>
                     <Rnd
-                        enableResizing={isEditMode}
-                        disableDragging={!isEditMode}
-                        default={{
-                            x: chart.x,
-                            y: chart.y,
-                            width: chart.width,
-                            height: chart.height,
-                        }}
+                        key={(index+1).toString()}
+                        enableResizing={isEditMode && !openDialog}
+                        disableDragging={!isEditMode || openDialog}
+                        size={{ width: charts[index].width, height: charts[index].height}}
+                        position={{x: charts[index].x, y: charts[index].y}}
                         onDragStop={(e, d) => {
                             const cloneChart = charts.slice();
                             cloneChart[index].x = d.x
@@ -84,7 +89,7 @@ function ChartList({charts, setCharts, isEditMode}) {
                         bounds="window"
                     >
                         <Box>
-                            {editButtons(chart, index)}
+                            {editButtons(chart, index,changeState)}
                             <ChartComposite chart={chart}/>
                         </Box>
 

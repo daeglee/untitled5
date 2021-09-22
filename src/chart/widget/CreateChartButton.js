@@ -23,6 +23,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import {MdDelete, MdEdit} from "react-icons/md";
 import {ChartDelete, ChartEdit} from "../ChartList";
+import {useDataContext, useDispatchContext} from "../../context/ChartDataProvider";
 
 /**
  * Create Chart Button and dialog
@@ -31,7 +32,7 @@ import {ChartDelete, ChartEdit} from "../ChartList";
  * @returns {JSX.Element}
  * @constructor
  */
-export default function CreateChartButton({isEditMode, setCharts, chart, charts, index}) {
+export default function CreateChartButton({isEditMode, chart,index, changeState}) {
     const [open, setOpen] = React.useState(false); // dialog open
 
     const [dataType, setDataType] = useState(RawDataType.CPU.controllerAddress);
@@ -46,7 +47,13 @@ export default function CreateChartButton({isEditMode, setCharts, chart, charts,
 
     const handleClickOpen = () => {
         setOpen(true);
+        changeState(true);
     };
+
+    const charts = useDataContext();
+    const setCharts = useDispatchContext();
+
+
     /**
      * Create Button is clicked
      */
@@ -63,27 +70,29 @@ export default function CreateChartButton({isEditMode, setCharts, chart, charts,
             height: height
         }]);
 
+        changeState(false);
         setOpen(false);
     };
 
     function handleSave () {
-        const cloneChart = charts.slice();
+        const cloneChart = [...charts];
         cloneChart[index] = {
-            id: charts[index].id,
+            ...cloneChart[index],
             chartType: chartType,
             dateType: dateType,
             rawDataType: dataType,
-            x: parseInt(document.getElementById("x-position").value),
-            y: parseInt(document.getElementById("y-position").value),
-            width: document.getElementById("width").value,
-            height: document.getElementById("height").value
+            x: x,
+            y: y,
+            width: width,
+            height: height
         }
-        console.log(cloneChart[index])
         setCharts(cloneChart);
         setOpen(false);
+        changeState(false);
     };
     const handleClose = () => {
         setOpen(false);
+        changeState(false);
     };
     const dataTypeChanged = (event) => {
         setDataType(event.target.value);

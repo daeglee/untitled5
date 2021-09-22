@@ -5,15 +5,15 @@ import {Link, Route} from "react-router-dom";
 import {getChartList, postChartList} from "./repository/ChartDataRepository";
 import CreateChartButton from "./chart/widget/CreateChartButton";
 import Button from "@mui/material/Button";
+import {useDataContext, useDispatchContext} from "./context/ChartDataProvider";
 
 function App() {
     const [loading, setLoading] = useState(true);
-    const [charts, setCharts] = useState([]);
     const [isEditMode, setMode] = useState(false);
 
-    function setChartsFunction(newValue){
-        setCharts(newValue);
-    }
+    const charts = useDataContext();
+    const setCharts = useDispatchContext();
+
     function getChart(){
         return charts;
     }
@@ -68,10 +68,10 @@ function App() {
                 <hr/>
                 {<div>
                     <Button variant="outlined" disabled={!isEditMode} onClick={saveClicked}>Save</Button>
-                    <CreateChartButton isEditMode={isEditMode} setCharts={setChartsFunction}/>
+                    <CreateChartButton isEditMode={isEditMode} />
                 </div>}
                 <Route path="/" exact={true}
-                       render={() => <ChartList charts={getChart()} setCharts={setChartsFunction} isEditMode={isEditMode}/>}/>
+                       render={() => <ChartList charts={getChart()} isEditMode={isEditMode}/>}/>
             </div>
         </>
     );
