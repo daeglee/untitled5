@@ -5,7 +5,7 @@ import {
     YAxis,
     Tooltip,
     XAxis,
-    ResponsiveContainer, Legend, Line
+    ResponsiveContainer, Legend, Line, Bar
 } from "recharts";
 import {toDate} from "date-fns";
 import {ChartType} from "../RawDataType";
@@ -15,7 +15,7 @@ import {MockChartUpdate, MockChartInitiate} from "../functions/MockChartUpdate";
 import {useInterval} from "../../util/useInterval";
 
 
-function LineChartComposite({rawDataType, dateType}) {
+function LineChartComposite({rawDataType, dateType, resourceList}) {
     const typeInfo = ChartType.LINE_CHART;
     const [data, setData] = useState([]);
 
@@ -23,7 +23,7 @@ function LineChartComposite({rawDataType, dateType}) {
         const afterThen = (x) => {
             setData(x);
         }
-        MockChartInitiate(typeInfo, rawDataType, dateType, afterThen);
+        MockChartInitiate(typeInfo, rawDataType, dateType, afterThen, resourceList);
     }, []);
 
 
@@ -37,7 +37,7 @@ function LineChartComposite({rawDataType, dateType}) {
             }
             setData((prevData) => [...prevData, ...x].slice(sliceSize));
         }
-        MockChartUpdate(typeInfo, rawDataType, dateType, afterThen);
+        MockChartUpdate(typeInfo, rawDataType, dateType, afterThen, resourceList);
 
     }, 1000);
 
@@ -62,11 +62,12 @@ function LineChartComposite({rawDataType, dateType}) {
 
                                return TimeFormatter(date, dateType);
                            }}/>
-                    <YAxis dataKey={rawDataType.YAxisDataKey}/>
                     <Tooltip content={<ChartToolTip/>}/>
                     <Legend/>
-                    <Line type="monotone" dataKey={rawDataType.YAxisDataKey} stroke="#8884d8" activeDot={{r: 8}}
-                          isAnimationActive={false}/>
+                    {resourceList.map( (value, index) =>
+                        <Line type="monotone" key={index.toString()} dataKey={value.resource} stroke="#8884d8" activeDot={{r: 8}}
+                        isAnimationActive={false}/>
+                    )}
                 </LineChart>
             </ResponsiveContainer>
         </>

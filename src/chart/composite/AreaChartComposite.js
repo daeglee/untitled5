@@ -17,7 +17,7 @@ import {useInterval} from "../../util/useInterval";
 import '../../css/chart.css';
 
 
-function AreaChartComposite({rawDataType, dateType}) {
+function AreaChartComposite({rawDataType, dateType, resourceList}) {
     const typeInfo = ChartType.AREA_CHART;
     const [data, setData] = useState([]);
 
@@ -25,7 +25,7 @@ function AreaChartComposite({rawDataType, dateType}) {
         const afterThen = (x) => {
             setData(x);
         }
-        MockChartInitiate(typeInfo, rawDataType, dateType, afterThen);
+        MockChartInitiate(typeInfo, rawDataType, dateType, afterThen, resourceList);
     }, []);
 
     useInterval( ()=>{
@@ -38,7 +38,7 @@ function AreaChartComposite({rawDataType, dateType}) {
             }
             setData( (prevData) => [...prevData, ...x].slice(sliceSize));
         }
-        MockChartUpdate(typeInfo, rawDataType, dateType, afterThen);
+        MockChartUpdate(typeInfo, rawDataType, dateType, afterThen, resourceList);
 
     }, 1000);
     // Check update
@@ -56,9 +56,12 @@ function AreaChartComposite({rawDataType, dateType}) {
                     </defs>
 
                     <CartesianGrid strokeDasharray="3 3"/>
-                    <YAxis dataKey={rawDataType.YAxisDataKey}/>
-                    <Area dataKey={rawDataType.YAxisDataKey} stroke="#2451B7" fill="url(#color)"
-                          isAnimationActive={false}/>
+
+
+                    {resourceList.map( (value, index) =>
+                        <Area key={index.toString()} dataKey={value.resource} stroke="#2451B7" fill="url(#color)"
+                              isAnimationActive={false}/>
+                    )}
 
                     <XAxis
                         dataKey="logTime"
@@ -72,7 +75,6 @@ function AreaChartComposite({rawDataType, dateType}) {
                     />
 
                     <YAxis
-                        datakey={rawDataType.YAxisDataKey}
                         axisLine={false}
                         tickLine={false}
                         tickCount={8}

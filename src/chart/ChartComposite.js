@@ -21,7 +21,7 @@ function getRawDataType(rawDataTypeString){
     return rawDataType;
 }
 
-function ChartCompositeFactory({chartType, rawDataType, dateTypeString}){
+function ChartCompositeFactory({chartType, rawDataType, dateTypeString, resourceList}){
     let dateType;
 
     switch (dateTypeString){
@@ -46,23 +46,23 @@ function ChartCompositeFactory({chartType, rawDataType, dateTypeString}){
     switch (chartType){
         case ChartType.AREA_CHART.name:
             return (
-                <AreaChartComposite rawDataType={rawDataType} dateType={dateType}/>
+                <AreaChartComposite rawDataType={rawDataType} dateType={dateType} resourceList={resourceList}/>
             );
         case ChartType.PIE_CHART.name:
             return (
-                <PieChartComposite rawDataType={rawDataType}/>
+                <PieChartComposite rawDataType={rawDataType} resourceList={resourceList}/>
             );
         case ChartType.LINE_CHART.name:
             return (
-                <LineChartComposite rawDataType={rawDataType} dateType={dateType}/>
+                <LineChartComposite rawDataType={rawDataType} dateType={dateType} resourceList={resourceList}/>
             );
         case ChartType.BAR_CHART.name:
             return (
-                <BarChartComposite rawDataType={rawDataType} dateType={dateType}/>
+                <BarChartComposite rawDataType={rawDataType} dateType={dateType} resourceList={resourceList}/>
             );
         case ChartType.SCATTER_CHART.name:
             return (
-                <ScatterChartComposite rawDataType={rawDataType} dateType={dateType}/>
+                <ScatterChartComposite rawDataType={rawDataType} dateType={dateType} resourceList={resourceList}/>
             );
         default:
             return (
@@ -85,6 +85,7 @@ function ChartComposite({chart}){
                 chartType={chart.chartType}
                 rawDataType={rawDataType}
                 dateTypeString={chart.dateType}
+                resourceList={chart.resourceList}
             />
         </>
     );

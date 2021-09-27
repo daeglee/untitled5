@@ -3,7 +3,7 @@ import {
     ScatterChart,
     CartesianGrid,
     YAxis,
-    XAxis, Legend, Scatter, ResponsiveContainer
+    XAxis, Legend, Scatter, ResponsiveContainer, Line
 } from "recharts";
 import {ChartType} from "../RawDataType";
 import {toDate} from "date-fns";
@@ -12,7 +12,7 @@ import {MockChartUpdate,MockChartInitiate} from "../functions/MockChartUpdate";
 import {useInterval} from "../../util/useInterval";
 
 
-function AreaChartComposite({rawDataType, dateType}) {
+function AreaChartComposite({rawDataType, dateType, resourceList}) {
     const typeInfo = ChartType.SCATTER_CHART;
     const [data, setData] = useState([]);
 
@@ -20,7 +20,7 @@ function AreaChartComposite({rawDataType, dateType}) {
         const afterThen = (x) => {
             setData(x);
         }
-        MockChartInitiate(typeInfo, rawDataType, dateType, afterThen);
+        MockChartInitiate(typeInfo, rawDataType, dateType, afterThen, resourceList);
     }, []);
 
 
@@ -34,7 +34,7 @@ function AreaChartComposite({rawDataType, dateType}) {
             }
             setData( (prevData) => [...prevData, ...x].slice(sliceSize));
         }
-        MockChartUpdate(typeInfo, rawDataType, dateType, afterThen);
+        MockChartUpdate(typeInfo, rawDataType, dateType, afterThen, resourceList);
 
     }, 1000);
 
@@ -55,11 +55,11 @@ function AreaChartComposite({rawDataType, dateType}) {
 
                     return TimeFormatter(date, dateType);
                 }}/>
-                <YAxis type="number" dataKey={rawDataType.YAxisDataKey}/>
                 <Legend/>
-
-                <Scatter name="data 1" dataKey={rawDataType.YAxisDataKey} fill="#8884d8"
-                         isAnimationActive={false}/>
+                {resourceList.map( (value, index) =>
+                    <Scatter name={value.resource} key={index.toString()} dataKey={value.resource} fill="#8884d8"
+                    isAnimationActive={false}/>
+                )}
             </ScatterChart>
             </ResponsiveContainer>
         </>

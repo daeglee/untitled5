@@ -61,7 +61,7 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
     const handleCreate = () => {
 
         setCharts((previousState) => [...previousState, {
-            id: previousState.length + 1,
+            id: charts[charts.length-1].id + 1,
             chartType: chartType,
             dateType: dateType,
             rawDataType: dataType,
@@ -74,6 +74,7 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
         if (changeState != null)
             changeState(false);
         setOpen(false);
+        console.log(charts);
     };
 
     function handleSave() {

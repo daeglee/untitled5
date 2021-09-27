@@ -12,11 +12,11 @@ import {toDate} from "date-fns";
 import {ChartType} from "../RawDataType";
 import TimeFormatter from "../functions/TimeFormatter";
 import ChartToolTip from "../functions/ChartToolTip";
-import {MockChartUpdate,MockChartInitiate} from "../functions/MockChartUpdate";
+import {MockChartUpdate, MockChartInitiate} from "../functions/MockChartUpdate";
 import {useInterval} from "../../util/useInterval";
 
 
-function BarChartComposite({rawDataType, dateType}) {
+function BarChartComposite({rawDataType, dateType, resourceList}) {
     const typeInfo = ChartType.BAR_CHART;
     const [data, setData] = useState([]);
 
@@ -24,10 +24,8 @@ function BarChartComposite({rawDataType, dateType}) {
         const afterThen = (x) => {
             setData(x);
         }
-        MockChartInitiate(typeInfo, rawDataType, dateType, afterThen);
+        MockChartInitiate(typeInfo, rawDataType, dateType, afterThen, resourceList);
     }, []);
-
-
 
     useInterval( ()=>{
         const afterThen = (x) => {
@@ -39,34 +37,35 @@ function BarChartComposite({rawDataType, dateType}) {
             }
             setData( (prevData) => [...prevData, ...x].slice(sliceSize));
         }
-        MockChartUpdate(typeInfo, rawDataType, dateType, afterThen);
+        MockChartUpdate(typeInfo, rawDataType, dateType, afterThen, resourceList);
 
     }, 1000);
 
     return (
         <>
             <ResponsiveContainer width="100%" height="90%">
-            <BarChart
-                data={data}>
+                <BarChart
+                    data={data}>
 
-                <CartesianGrid strokeDasharray="3 3"/>
-                <YAxis dataKey={rawDataType.YAxisDataKey}/>
+                    <CartesianGrid strokeDasharray="3 3"/>
 
-                <XAxis
-                    dataKey="logTime"
-                    tickFormatter={(logTime) => {
-                        const date = toDate(logTime * 1000);
+                    <XAxis
+                        dataKey="logTime"
+                        tickFormatter={(logTime) => {
+                            const date = toDate(logTime * 1000);
 
-                        return TimeFormatter(date, dateType);
-                    }}
-                />
+                            return TimeFormatter(date, dateType);
+                        }}
+                    />
 
-                <Bar stackId="a" fill="#8884d8" dataKey={rawDataType.YAxisDataKey}
-                     isAnimationActive={false}/>
-                <Tooltip content={<ChartToolTip/>}/>
-                <CartesianGrid opacity={0.1} vertical={false}/>
-            </BarChart>
-                </ResponsiveContainer>
+                    {resourceList.map((value, index) =>
+                        <Bar key={index.toString()} dataKey={value.resource} stackId="a"
+                             isAnimationActive={false} fill="#8884d8"/>
+                    )}
+                    <Tooltip content={<ChartToolTip/>}/>
+                    <CartesianGrid opacity={0.1} vertical={false}/>
+                </BarChart>
+            </ResponsiveContainer>
         </>
     );
 }
