@@ -56,7 +56,7 @@ function PieChartComposite({rawDataType, resourceList}) {
         const afterThen = (x) => {
             const tempArray = [];
 
-            resourceList.map((value, index) => {
+            resourceList.forEach((value, index) => {
                 const lastestValue = x[0][Object.getOwnPropertyNames(x[0])[index]];
                 if(lastestValue == null){
                     return;
@@ -76,10 +76,19 @@ function PieChartComposite({rawDataType, resourceList}) {
 
     }, 1000);
 
+    function getCell(index) {
+        if(data[index] != null){
+            return <Cell key={`cell-0`}
+                         fill={data[index][0].value > config.PIE_RED ? COLORS[2] : data[index][0].value > config.PIE_YELLOW ? COLORS[1] : COLORS[0]}/>;
+        }else{
+            return <Cell key={`cell-0`}/>
+        }
+    }
+
     return (
         <>
             {resourceList.map((value, index) =>
-                <ResponsiveContainer width="100%" height="90%" key={index.toString()} >
+                <ResponsiveContainer width="100%" height="90%" key={index.toString()}>
                     <PieChart>
                         <Pie
                             data={data[index]}
@@ -93,8 +102,7 @@ function PieChartComposite({rawDataType, resourceList}) {
                             dataKey="value"
                             isAnimationActive={false}
                         >
-                            <Cell key={`cell-0`}
-                                  fill={data[index][0].value > config.PIE_RED ? COLORS[2] : data[index][0].value > config.PIE_YELLOW ? COLORS[1] : COLORS[0]}/>
+                            {getCell(index)}
 
                             <Cell key={`cell-1`} fill={DEFAULT_COLOR}/>
                         </Pie>
