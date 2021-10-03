@@ -6,6 +6,7 @@ import {getChartList, postChartList} from "./repository/ChartDataRepository";
 import CreateChartButton from "./chart/widget/CreateChartButton";
 import Button from "@mui/material/Button";
 import {useDataContext, useDispatchContext} from "./context/ChartDataProvider";
+import Setting from "./Setting";
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -54,6 +55,21 @@ function App() {
         );
     }
 
+    function settingClicked() {
+        setMode(false);
+
+    }
+
+    function editMode() {
+        if(isEditMode)
+        return <>
+            {<div>
+                <Button variant="outlined" disabled={!isEditMode} onClick={saveClicked}>Save</Button>
+                <CreateChartButton isEditMode={isEditMode}/>
+            </div>}
+        </>;
+    }
+
     return (
         <>
             <div>
@@ -64,14 +80,16 @@ function App() {
                     <li onClick={editClicked}>
                         <Link to="/">편집하기</Link>
                     </li>
+                    <li onClick={settingClicked}>
+                        <Link to="/Setting">환경설정</Link>
+                    </li>
                 </ul>
                 <hr/>
-                {<div>
-                    <Button variant="outlined" disabled={!isEditMode} onClick={saveClicked}>Save</Button>
-                    <CreateChartButton isEditMode={isEditMode} />
-                </div>}
+                {editMode()}
                 <Route path="/" exact={true}
                        render={() => <ChartList charts={getChart()} isEditMode={isEditMode}/>}/>
+                <Route path="/Setting" exact={true}
+                       render={() => <Setting/>}/>
             </div>
         </>
     );
