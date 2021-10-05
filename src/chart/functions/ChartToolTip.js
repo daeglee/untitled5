@@ -3,7 +3,7 @@ import * as config from "../../config";
 import React from "react";
 
 function checkPayload(payload) {
-    return (<div style={{color: "black", zIndex: 99,}}>
+    return (<div style={{color: "black"}} key={payload.name}>
         <p>{payload.name}</p>
         <h3>{payload.value.toFixed(0)}%</h3>
     </div>);

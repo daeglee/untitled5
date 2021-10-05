@@ -3,7 +3,7 @@ import axios from "axios";
 async function setStateApi(rawDataType, dateType, startTime, endTime, resourceList) {
 
     const resources = [];
-    resourceList.map(
+    resourceList.forEach(
         (value) =>{
             resources.push(value.resource);
         }

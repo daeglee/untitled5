@@ -12,9 +12,11 @@ export const ChartEdit = styled.div`
   opacity: 0.5;
   top: 40%;
   left: 40%;
+
   &:hover {
     color: crimson;
   }
+
   display: none;
 `;
 
@@ -24,9 +26,11 @@ export const ChartDelete = styled.div`
   opacity: 0.5;
   top: 40%;
   left: 50%;
+
   &:hover {
     color: crimson;
   }
+
   display: none;
 `;
 
@@ -35,10 +39,12 @@ const Box = styled.div`
   height: 100%;
   width: 100%;
   position: relative;
+
   &:hover {
     ${ChartDelete} {
       display: initial;
     }
+
     ${ChartEdit} {
       display: initial;
     }
@@ -50,12 +56,13 @@ function ChartList({isEditMode}) {
     const charts = useDataContext();
     const setCharts = useDispatchContext();
 
-    const [openDialog,setOpenDialog] = useState(false); // Dialog open에도 drag되는 문제
-    function changeState(openState){
+    const [openDialog, setOpenDialog] = useState(false); // Dialog open에도 drag되는 문제
+    function changeState(openState) {
         setOpenDialog(openState);
     }
+
     const editButtons = (chart, index) => {
-        if(isEditMode)
+        if (isEditMode)
             return (
                 <CreateChartButton isEditMode={isEditMode} chart={chart} index={index} changeState={changeState}/>
             )
@@ -65,36 +72,34 @@ function ChartList({isEditMode}) {
     return (
         <div>
             {charts.map((chart, index) => (
-                <>
-                    <Rnd
-                        key={(index+1).toString()}
-                        enableResizing={isEditMode && !openDialog}
-                        disableDragging={!isEditMode || openDialog}
-                        size={{ width: charts[index].width, height: charts[index].height}}
-                        position={{x: charts[index].x, y: charts[index].y}}
-                        onDragStop={(e, d) => {
-                            const cloneChart = charts.slice();
-                            cloneChart[index].x = d.x
-                            cloneChart[index].y = d.y
-                            setCharts(cloneChart);
-                        }}
-                        onResizeStop={(e, direction, ref, delta, position) => {
-                            const cloneChart = charts.slice();
-                            cloneChart[index].width = ref.style.width;
-                            cloneChart[index].height = ref.style.height;
-                            setCharts(cloneChart);
-                        }}
-                        minWidth={100}
-                        minHeight={100}
-                        bounds="window"
-                    >
-                        <Box>
-                            {editButtons(chart, index)}
-                            <ChartComposite chart={chart}/>
-                        </Box>
+                <Rnd
+                    key={(index + 1).toString()}
+                    enableResizing={isEditMode && !openDialog}
+                    disableDragging={!isEditMode || openDialog}
+                    size={{width: charts[index].width, height: charts[index].height}}
+                    position={{x: charts[index].x, y: charts[index].y}}
+                    onDragStop={(e, d) => {
+                        const cloneChart = charts.slice();
+                        cloneChart[index].x = d.x
+                        cloneChart[index].y = d.y
+                        setCharts(cloneChart);
+                    }}
+                    onResizeStop={(e, direction, ref, delta, position) => {
+                        const cloneChart = charts.slice();
+                        cloneChart[index].width = ref.style.width;
+                        cloneChart[index].height = ref.style.height;
+                        setCharts(cloneChart);
+                    }}
+                    minWidth={100}
+                    minHeight={100}
+                    bounds="window"
+                >
+                    <Box>
+                        {editButtons(chart, index)}
+                        <ChartComposite chart={chart}/>
+                    </Box>
 
-                    </Rnd>
-                </>
+                </Rnd>
             ))}
         </div>
     );

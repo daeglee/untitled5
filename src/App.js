@@ -88,7 +88,7 @@ function App() {
                 {editMode()}
                 <Route path="/" exact={true}
                        render={() => <ChartList charts={getChart()} isEditMode={isEditMode}/>}/>
-                <Route path="/Setting" exact={true}
+                <Route path="/Setting"
                        render={() => <Setting/>}/>
             </div>
         </>

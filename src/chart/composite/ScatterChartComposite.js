@@ -10,11 +10,13 @@ import {toDate} from "date-fns";
 import TimeFormatter from "../functions/TimeFormatter";
 import {MockChartUpdate,MockChartInitiate} from "../functions/MockChartUpdate";
 import {useInterval} from "../../util/useInterval";
+import {useThemeContext} from "../../context/ChartThemeProvider";
 
 
 function AreaChartComposite({rawDataType, dateType, resourceList}) {
     const typeInfo = ChartType.SCATTER_CHART;
     const [data, setData] = useState([]);
+    const theme = useThemeContext();
 
     useEffect(() => {
         const afterThen = (x) => {
@@ -57,7 +59,7 @@ function AreaChartComposite({rawDataType, dateType, resourceList}) {
                 }}/>
                 <Legend/>
                 {resourceList.map( (value, index) =>
-                    <Scatter name={value.resource} key={index.toString()} dataKey={value.resource} fill="#8884d8"
+                    <Scatter name={value.resource} key={index.toString()} dataKey={value.resource} fill={theme[index]}
                     isAnimationActive={false}/>
                 )}
             </ScatterChart>

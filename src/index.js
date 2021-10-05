@@ -5,11 +5,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {ChartDataProvider} from "./context/ChartDataProvider";
+import {ChartThemeProvider} from "./context/ChartThemeProvider";
 
 ReactDOM.render(
     <BrowserRouter>
         <ChartDataProvider>
-            <App/>
+            <ChartThemeProvider>
+                <App/>
+            </ChartThemeProvider>
         </ChartDataProvider>
     </BrowserRouter>,
     document.getElementById('root')

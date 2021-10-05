@@ -3,10 +3,9 @@ import {
     CartesianGrid,
     YAxis,
     Tooltip,
-    Area,
     XAxis,
     Bar, ResponsiveContainer,
-    BarChart
+    BarChart, Legend
 } from "recharts";
 import {toDate} from "date-fns";
 import {ChartType} from "../RawDataType";
@@ -14,11 +13,13 @@ import TimeFormatter from "../functions/TimeFormatter";
 import ChartToolTip from "../functions/ChartToolTip";
 import {MockChartUpdate, MockChartInitiate} from "../functions/MockChartUpdate";
 import {useInterval} from "../../util/useInterval";
+import {useThemeContext} from "../../context/ChartThemeProvider";
 
 
 function BarChartComposite({rawDataType, dateType, resourceList}) {
     const typeInfo = ChartType.BAR_CHART;
     const [data, setData] = useState([]);
+    const theme = useThemeContext();
 
     useEffect(() => {
         const afterThen = (x) => {
@@ -59,10 +60,11 @@ function BarChartComposite({rawDataType, dateType, resourceList}) {
                     />
 
                     {resourceList.map((value, index) =>
-                        <Bar key={index.toString()} dataKey={value.resource} stackId="a"
-                             isAnimationActive={false} fill="#8884d8"/>
+                        <Bar key={index.toString()} dataKey={value.resource} stackId={index.toString()}
+                             isAnimationActive={false} fill={theme[index]}/>
                     )}
                     <Tooltip content={<ChartToolTip/>}/>
+                    <Legend />
                     <CartesianGrid opacity={0.1} vertical={false}/>
                 </BarChart>
             </ResponsiveContainer>

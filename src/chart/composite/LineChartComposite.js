@@ -13,11 +13,13 @@ import TimeFormatter from "../functions/TimeFormatter";
 import ChartToolTip from "../functions/ChartToolTip";
 import {MockChartUpdate, MockChartInitiate} from "../functions/MockChartUpdate";
 import {useInterval} from "../../util/useInterval";
+import {useThemeContext} from "../../context/ChartThemeProvider";
 
 
 function LineChartComposite({rawDataType, dateType, resourceList}) {
     const typeInfo = ChartType.LINE_CHART;
     const [data, setData] = useState([]);
+    const theme = useThemeContext();
 
     useEffect(() => {
         const afterThen = (x) => {
@@ -65,7 +67,7 @@ function LineChartComposite({rawDataType, dateType, resourceList}) {
                     <Tooltip content={<ChartToolTip/>}/>
                     <Legend/>
                     {resourceList.map( (value, index) =>
-                        <Line type="monotone" key={index.toString()} dataKey={value.resource} stroke="#8884d8" activeDot={{r: 8}}
+                        <Line type="monotone" key={index.toString()} dataKey={value.resource} stroke={theme[index]} activeDot={{r: 8}}
                         isAnimationActive={false}/>
                     )}
                 </LineChart>

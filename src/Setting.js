@@ -1,51 +1,48 @@
 import * as React from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import List from '@mui/material/List';
+import {FormControl, ListItem, ListItemButton, ListItemText, ListSubheader, MenuItem, Select} from "@mui/material";
+import {chartThemeList} from "./context/theme/chartThemList";
+import {useSetThemeContext, useThemeContext} from "./context/ChartThemeProvider";
+import {useEffect, useState} from "react";
 
 export default function Setting() {
-    const [age, setAge] = React.useState('');
+    const theme = useThemeContext();
+    const setTheme = useSetThemeContext();
+    const [themeSelect, setThemeSelect] = useState(chartThemeList[0].name);
+    useEffect(() => {
+        chartThemeList.forEach( (value,index) =>{
+            if(theme === value.value){
+                setThemeSelect(value.name);
+            }
+        })
+    }, []);
 
-    const handleChange = (event) => {
-        setAge(event.target.value);
+    const changeTheme = (event) => {
+        const targetValue = event.target.value;
+        chartThemeList.forEach( (value,index) =>{
+            if(targetValue === value.name){
+                setTheme(value.value);
+                setThemeSelect(value.name);
+            }
+        })
     };
-
     return (
-        <div>
-            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-standard-label">Age</InputLabel>
-                <Select
-                    labelId="demo-simple-select-standard-label"
-                    id="demo-simple-select-standard"
-                    value={age}
-                    onChange={handleChange}
-                    label="Age"
-                >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+        <List
+            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+            subheader={<ListSubheader>Settings</ListSubheader>}
+        >
+            <ListItemButton>
+                <FormControl sx={{mt: 2, minWidth: 240}}>
+                <Select label="Chart Theme" id="chartTheme" onChange={changeTheme}
+                value={themeSelect}>
+                    {chartThemeList.map( (value,index) =>
+                        <MenuItem key={index.toString()}value={value.name}> {value.name} </MenuItem>
+                    )}
+
                 </Select>
-            </FormControl>
-            <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-filled-label">Age</InputLabel>
-                <Select
-                    labelId="demo-simple-select-filled-label"
-                    id="demo-simple-select-filled"
-                    value={age}
-                    onChange={handleChange}
-                >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </FormControl>
-        </div>
+                    </FormControl>
+            </ListItemButton>
+
+        </List>
     );
 }
