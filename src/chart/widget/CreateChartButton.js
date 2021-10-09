@@ -63,17 +63,15 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
      * Create Button is clicked
      */
     const handleCreate = () => {
-
-        const resources = selectedResources.splice(",");
         const resourceInfos = [];
-        for(let resource in resources){
+        selectedResources.forEach( resource => {
             resourceList.forEach( value => {
                 if(value.resource === resource){
                     resourceInfos.push(value);
                 }
             })
 
-        }
+        });
 
         setCharts((previousState) => [...previousState, {
             id: charts[charts.length - 1].id + 1,
@@ -94,16 +92,15 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
     };
 
     function handleSave() {
-        const resources = selectedResources.splice(",");
         const resourceInfos = [];
-        for(let resource in resources){
+        selectedResources.forEach( resource => {
             resourceList.forEach( value => {
                 if(value.resource === resource){
                     resourceInfos.push(value);
                 }
             })
 
-        }
+        });
         const cloneChart = [...charts];
         cloneChart[index] = {
             ...cloneChart[index],
