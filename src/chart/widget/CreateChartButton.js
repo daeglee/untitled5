@@ -16,7 +16,7 @@ import {
     List,
     ListItem,
     ListItemButton,
-    ListItemText,
+    ListItemText, OutlinedInput,
     TextField
 } from "@mui/material";
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -24,6 +24,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import {MdDelete, MdEdit} from "react-icons/md";
 import {ChartDelete, ChartEdit} from "../ChartList";
 import {useDataContext, useDispatchContext} from "../../context/ChartDataProvider";
+import {getResourceList} from "../functions/GetResourceList";
 
 /**
  * Create Chart Button and dialog
@@ -39,6 +40,9 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
     const [chartType, setChartType] = useState(ChartType.AREA_CHART.name);
     const [dateType, setDateType] = useState(DateType.REAL_TIME.name);
     const [nestedOpen, nestedSetOpen] = React.useState(false); // detail open
+    const [resourceList, setResourceList] = useState([]); //원본들
+    const [resources, setResources] = useState([]); // resource의 이름만 가지고 있음
+    const [selectedResources, setSelectedResources] = useState([]); // 선택된 이름
 
     const [x, setX] = useState(500);
     const [y, setY] = useState(500);
@@ -60,15 +64,27 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
      */
     const handleCreate = () => {
 
+        const resources = selectedResources.splice(",");
+        const resourceInfos = [];
+        for(let resource in resources){
+            resourceList.forEach( value => {
+                if(value.resource === resource){
+                    resourceInfos.push(value);
+                }
+            })
+
+        }
+
         setCharts((previousState) => [...previousState, {
-            id: charts[charts.length-1].id + 1,
+            id: charts[charts.length - 1].id + 1,
             chartType: chartType,
             dateType: dateType,
             rawDataType: dataType,
             x: x,
             y: y,
             width: width,
-            height: height
+            height: height,
+            resourceList: resourceInfos,
         }]);
 
         if (changeState != null)
@@ -78,6 +94,16 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
     };
 
     function handleSave() {
+        const resources = selectedResources.splice(",");
+        const resourceInfos = [];
+        for(let resource in resources){
+            resourceList.forEach( value => {
+                if(value.resource === resource){
+                    resourceInfos.push(value);
+                }
+            })
+
+        }
         const cloneChart = [...charts];
         cloneChart[index] = {
             ...cloneChart[index],
@@ -87,7 +113,8 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
             x: x,
             y: y,
             width: width,
-            height: height
+            height: height,
+            resourceList: resourceInfos,
         }
         setCharts(cloneChart);
         setOpen(false);
@@ -95,6 +122,7 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
             changeState(false);
         }
     }
+
     const handleClose = () => {
         setOpen(false);
         if (changeState != null) {
@@ -128,10 +156,28 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
         setHeight(e.target.value);
     }
     useEffect(() => {
+        getResourceList().then(value => {
+                setResourceList(value);
+                const resources = [];
+                value.forEach(name => {
+                    resources.push(name.resource);
+                })
+                setResources(resources);
+            }
+        ).catch(e => console.log("loading resource info fails "))
+
         if (chart != null && isEditMode) {
             setChartType(charts[index].chartType);
             setDataType(charts[index].rawDataType);
             setDateType(charts[index].dateType);
+            if(chart.resourceList != null ){
+                const list = [];
+                chart.resourceList.forEach( value =>{
+                    list.push(value.resource);
+                })
+                setSelectedResources(list);
+            }
+
         }
     }, []);
 
@@ -154,6 +200,43 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
             } else {
                 return <Button onClick={handleCreate}>Create</Button>;
             }
+        }
+
+        const handleResourceListChange = (event) => {
+            const {
+                target: {value}
+            } = event;
+            setSelectedResources(
+                typeof value === "string" ? value.split(",") : value
+            );
+        };
+
+        function resourceListItem() {
+            if(resources === null)
+                return <></>;
+
+            return <ListItem>
+                <FormControl sx={{m: 2, width: 240}}>
+                    <InputLabel id="multiple-resource-label">Resource</InputLabel>
+                    <Select
+                        labelId="multiple-resource"
+                        id="multiple-resource"
+                        multiple
+                        value={selectedResources}
+                        onChange={handleResourceListChange}
+                        input={<OutlinedInput label="Resource"/>}
+                    >
+                        {resources.map((name) => (
+                            <MenuItem
+                                key={name}
+                                value={name}
+                            >
+                                {name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </ListItem>;
         }
 
         return <Dialog open={open} onClose={handleClose}>
@@ -216,6 +299,7 @@ export default function CreateChartButton({isEditMode, chart, index, changeState
                             </Select>
                         </FormControl>
                     </ListItem>
+                    {resourceListItem()}
                     <ListItemButton onClick={handleClick}>
                         <ListItemText primary="Detail"/>
                         {nestedOpen ? <ExpandLess/> : <ExpandMore/>}

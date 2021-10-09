@@ -10,14 +10,23 @@ function checkPayload(payload) {
 }
 
 const ChartToolTip = ({active, payload, label}) => {
+    function printPayload() {
+        if(payload === null){
+            return <></>
+        }
+        return <>
+            {payload.map((value, index) =>
+                checkPayload(value)
+            )}
+        </>;
+    }
+
     if (active) {
         return (
             //TODO: tooltip style
             <div className="tooltip">
                 <p>{format(toDate(label * 1000), config.BASIC_TOOLTIP, config.CURRENT_LOCALE)}</p>
-                {payload.map((value, index) =>
-                    checkPayload(value)
-                )}
+                {printPayload()}
             </div>
         );
     }
